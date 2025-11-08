@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Feliz Aniversário 🎂</title>
+<meta name="color-scheme" content="dark light" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script> 
+<style>
+:root{
+  --bg:#101328; --panel:#171d35; --txt:#f2f4ff;
+  --accent:#fff676; --glow:#ffb66b; /* fogo */
+  --hot-core:#ffffff;
+
+  /* Chocolate vibes */
+  --cakeA:#8b5e3c;   /* camada 1: chocolate ao leite */
+  --cakeB:#a06b45;   /* camada 2: um tom acima */
+  --cream:#5a3a2e;   /* cobertura/ganache escura (topo e gotas) */
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100svh; display:grid; place-items:center;
+  font:500 16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Noto Sans",sans-serif;
+  color:var(--txt);
+  background:
+    radial-gradient(1200px 500px at 50% -20%, color-mix(in oklab, var(--panel) 40%, #000) 10%, var(--bg) 60%),
+    linear-gradient(180deg, #0000, #0002);
+}
+.container{ width:min(720px,94vw); padding:12px }
+.card{
+  position:relative; overflow:hidden; background:var(--panel);
+  border-radius:28px; padding:28px 20px 22px;
+  box-shadow:0 26px 70px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+  animation:cardIn .6s ease both;
+  text-align:center;
+}
+.card-boing{ animation:cardBoing .5s cubic-bezier(.2, .9, .2, 1.2) }
+@keyframes cardBoing{ 0%{ transform:scale(1) } 40%{ transform:scale(1.006) translateY(-2px) } 100%{ transform:scale(1) } }
+
+@keyframes cardIn{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+h1{font-size:clamp(22px,5.4vw,34px); margin:0 0 6px}
+.subtitle{opacity:.9; margin:0 0 16px}
+.stage{ position:relative; height:320px; margin:10px auto 8px }
+#cake{
+  position:absolute; left:50%; bottom:38px; transform:translateX(-50%); width:250px; height:128px;
+  cursor:pointer;
+}
+
+/* --- Bolo --- */
+.layer{ position:absolute; left:0; right:0; height:46px; border-radius:12px; box-shadow:inset 0 -4px 0 #0001 }
+.layer:nth-child(1){bottom:0;   background:linear-gradient(var(--cakeA), color-mix(in oklab,var(--cakeA),#000 4%))}
+.layer:nth-child(2){bottom:42px;background:linear-gradient(var(--cakeB), color-mix(in oklab,var(--cakeB),#000 4%))}
+.layer:nth-child(3){bottom:84px;background:linear-gradient(var(--cakeA), color-mix(in oklab,var(--cakeA),#000 4%))}
+
+/* Cobertura (ganache) com menisco e sombra */
+.cake-top{
+  position:absolute; left:0; right:0; top:-18px; height:32px; background:
+    linear-gradient(180deg, color-mix(in oklab, var(--cream), #000 6%), var(--cream));
+  border-radius:18px 18px 8px 8px; 
+  box-shadow:
+    inset 0 8px 0 color-mix(in oklab, #fff 28%, transparent),
+    inset 0 -2px 0 color-mix(in oklab, #000 20%, transparent);
+}
+/* Escorridos chiques nas EXTREMIDADES via pseudo-elementos */
+.cake-top::before,
+.cake-top::after{
+  content:""; position:absolute; top:26px; width:18px; height:42px;
+  background:linear-gradient(180deg, color-mix(in oklab, var(--cream), #000 4%), var(--cream));
+  border-radius:10px 10px 16px 16px / 10px 10px 20px 20px;
+  box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent);
+}
+.cake-top::before{ left:10px;  height:38px; width:16px; }
+.cake-top::after { right:10px; height:46px; width:20px; }
+/* brilho lateral sutil nas extremidades */
+.cake-top::before{ box-shadow:inset 0 -2px 0 #0003, inset 3px 0 0 #ffffff1a }
+.cake-top::after { box-shadow:inset 0 -2px 0 #0003, inset -3px 0 0 #ffffff1a }
+
+/* Escorridos discretos no MEIO (1–2) */
+.drip{
+  position:absolute; top:20px;
+  background:linear-gradient(180deg, color-mix(in oklab, var(--cream), #000 3%), var(--cream));
+  border-radius:10px 10px 18px 18px / 10px 10px 22px 22px;
+  box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent);
+}
+/* posições chiques ~ 35% e 65% da largura */
+.cake-top .mid1{ left:34%; width:14px; height:30px }
+.cake-top .mid2{ left:64%; width:10px; height:24px }
+
+/* --- Vela --- */
+.candle{
+  position:absolute; bottom:126px; left:50%; width:14px; height:58px; margin-left:-7px;
+  background:#fff; border-radius:7px; box-shadow:0 0 0 2px #ffffff10 inset, 0 10px 0 -8px #0004;
+  animation:candleGlow 3s ease-in-out infinite alternate;
+}
+@keyframes candleGlow {
+  from { box-shadow:0 0 0 2px #ffffff10 inset, 0 0 12px rgba(255,182,107,.35), 0 10px 0 -8px #0004; }
+  to { box-shadow:0 0 0 2px #ffffff10 inset, 0 0 20px rgba(255,182,107,.55), 0 10px 0 -8px #0004; }
+}
+.candle:before,.candle:after{
+  content:""; position:absolute; left:0; right:0; height:8px;
+  background:repeating-linear-gradient(45deg, var(--accent) 0 8px, #ffffff 8px 16px);
+  border-radius:7px; box-shadow:inset 0 0 0 1px #0001
+}
+.candle:before{ top:10px } .candle:after{ top:26px }
+.wick{ position:absolute; top:-12px; left:50%; width:2px; height:14px; margin-left:-1px; border-radius:2px; background:#333 }
+
+/* Chama padrão */
+.fire{
+  position:absolute; top:-38px; left:50%; width:20px; height:28px; margin-left:-10px;
+  border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+  background:radial-gradient(60% 60% at 50% 50%, #ffd36b 0%, color-mix(in oklab, var(--glow), #ff5a00 30%) 60%, #ff5a00 100%);
+  filter:drop-shadow(0 0 14px var(--glow));
+  transform-origin:50% 90%;
+  animation:flicker .09s infinite alternate, float 1.8s ease-in-out infinite;
+}
+.fire::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(40% 40% at 50% 60%, var(--hot-core) 0%, #ffd36b 60%, transparent 80%);
+  filter: drop-shadow(0 0 8px var(--hot-core));
+  opacity: 0.95;
+}
+@keyframes flicker{from{transform:translateX(-1px) rotate(-2deg) scale(1.00)} to{transform:translateX(1px) rotate(2deg) scale(1.07)}}
+@keyframes float{0%,100%{margin-top:0}50%{margin-top:-4px}}
+
+/* Fumaça */
+.smoke{ position:absolute; top:-20px; left:50%; width:6px; height:6px; margin-left:-3px;
+  background:radial-gradient(#ffffffbb, transparent 60%); border-radius:50%; opacity:0; filter:blur(1px)
+}
+.smoke.s1{ animation:smoke 1.8s linear infinite } .smoke.s2{ animation:smoke 2.1s .2s linear infinite } .smoke.s3{ animation:smoke 2.4s .5s linear infinite }
+@keyframes smoke{ 0%{ transform:translateY(0) scale(.5); opacity:.7 } 70%{ opacity:.35 } 100%{ transform:translateY(-40px) translateX(-6px) scale(1.35); opacity:0 } }
+
+/* Micro brilho ao reacender (0.15s) */
+.fire.relight{
+  animation:glowPop .15s ease-out, flicker .09s infinite alternate, float 1.8s ease-in-out infinite;
+  filter:drop-shadow(0 0 26px var(--glow)) saturate(1.25);
+  transform:scale(1.08);
+}
+@keyframes glowPop{
+  0%{ filter:drop-shadow(0 0 6px var(--glow)); transform:scale(.9); }
+  100%{ filter:drop-shadow(0 0 26px var(--glow)); transform:scale(1.08); }
+}
+
+/* --- Prato --- */
+.plate{
+  position:absolute; left:50%; bottom:26px; width:280px; height:18px; margin-left:-140px;
+  background:linear-gradient(#c9d0ff44,#0000), #e9ebff1a; border-radius:999px; box-shadow:inset 0 2px 5px #0002
+}
+
+/* --- Mensagem (centralizada) --- */
+#typed{
+  margin:10px auto 0;
+  max-width:min(56ch, 90%);
+  min-height:2.2em;
+  font-size:clamp(15px,3.5vw,18px);
+  text-wrap:balance;
+  text-align:center;
+  display:inline-block;
+  padding:0 10px;
+  border-left:none;
+  border-bottom:3px solid var(--accent);
+  background:linear-gradient(90deg, #ffffff06, #ffffff00);
+  border-radius:8px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+  opacity:.0; transform:translateY(6px);
+  transition:opacity .35s ease, transform .35s ease;
+}
+#typed.reveal{ opacity:1; transform:translateY(0) }
+
+/* --- Estados --- */
+.blown .fire{ display:none } 
+.blown .smoke{ opacity:1 } 
+
+/* --- Contagem SEM DESFOQUE --- */
+#countdown{
+  position:absolute; inset:0; display:grid; place-items:center;
+  background:transparent;
+  font-weight:900; font-size:clamp(48px,16vw,120px); letter-spacing:.02em;
+  color:#fff; text-shadow:0 4px 18px rgba(0,0,0,.45), 0 0 10px rgba(255,182,107,.35);
+  opacity:0; pointer-events:none; transition:opacity .2s ease;
+}
+#countdown.show{ opacity:1 }
+
+/* --- Balões --- */
+#fx-balloons{ position:absolute; inset:0; pointer-events:none; overflow:hidden }
+.balloon{ position:absolute; bottom:-120px; width:28px; height:36px; border-radius:50% 50% 48% 48%;
+  background:radial-gradient(circle at 30% 32%, #fff8 0 15%, #0000 16%), var(--accent);
+  filter:drop-shadow(0 6px 8px rgba(0,0,0,.35)); opacity:.96; animation:rise 6.4s linear forwards }
+.balloon::after{ content:""; position:absolute; left:50%; bottom:-24px; width:2px; height:26px; background:#ffffff55; transform:translateX(-50%) }
+@keyframes rise{ 0%{ transform:translateY(0) translateX(0) rotate(0) } 100%{ transform:translateY(-120vh) translateX(var(--drift,0)) rotate(6deg) } }
+
+/* --- Confete + faíscas + pulso + estrelinhas --- */
+#confetti{ position:absolute; inset:0; pointer-events:none }
+#fx-sparks{ position:absolute; left:50%; bottom:190px; width:0; height:0; pointer-events:none }
+.spark{ position:absolute; width:4px; height:4px; border-radius:50%;
+  background:radial-gradient(circle, #fff 0 35%, #fffb 50%, #0000 60%);
+  transform:translateX(var(--dx,0)) translateY(0) scale(.8); animation:spark 1s ease-out forwards }
+@keyframes spark{ to{ transform:translateX(var(--dx, 0)) translateY(-60px) scale(1.2); opacity:0 } }
+#pulse{ position:absolute; left:50%; bottom:80px; width:40px; height:40px; margin-left:-20px; border-radius:50%; pointer-events:none; opacity:0;
+  background:radial-gradient(circle, #fff3 0, #fff0 60%) }
+#pulse.show{ animation:pulse .6s ease-out 1 }
+@keyframes pulse{ from{opacity:.9; transform:scale(.2)} to{opacity:0; transform:scale(3)} }
+#twinkles{ position:absolute; inset:0; pointer-events:none; overflow:hidden }
+.tw{ position:absolute; width:2px; height:2px; border-radius:50%; background:#fff9; opacity:.5; filter:drop-shadow(0 0 4px #fff6); animation:tw 2.6s ease-in-out infinite }
+@keyframes tw{ 0%,100%{ transform:scale(.8); opacity:.25 } 50%{ transform:scale(1.4); opacity:.9 } }
+
+/* --- Boing --- */
+.boing{ animation:boing .5s cubic-bezier(.2, .9, .2, 1.2) }
+@keyframes boing{ 0%{ transform:translateX(-50%) scale(1) } 40%{ transform:translateX(-50%) scale(1.04) translateY(-2px) } 100%{ transform:translateX(-50%) scale(1) } }
+
+/* --- Rodapé --- */
+.footer{ margin-top:14px; opacity:.75; font-size:12px; text-align:center }
+.footer a{ color:#ffd3e6; text-decoration:none; border-bottom:1px dotted #ffd3e655 }
+</style>
+</head>
+<body>
+<main class="container">
+  <article class="card" id="card-el" aria-label="Cartão animado de aniversário">
+    <h1>Feliz Aniversário, <span id="name">Douglas!</span> 🎂</h1>
+    <p class="subtitle">Assopre a velinha, velhinho! ha ha </p>
+
+    <div class="stage" aria-live="polite">
+      <div id="twinkles"></div>
+
+      <div id="cake" aria-label="Bolo com vela animada" role="img" title="Toque para assoprar/acender">
+        <div class="layer"></div><div class="layer"></div><div class="layer"></div>
+        <div class="cake-top">
+          <!-- escorridos chiques: só extremidades (via ::before/::after) e 1–2 no meio -->
+          <span class="drip mid1"></span>
+          <span class="drip mid2"></span>
+        </div>
+        <div class="candle">
+          <i class="wick"></i>
+          <i class="fire" aria-hidden="true"></i>
+          <i class="smoke s1" aria-hidden="true"></i>
+          <i class="smoke s2" aria-hidden="true"></i>
+          <i class="smoke s3" aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <div class="plate" aria-hidden="true"></div>
+
+      <div id="fx-balloons"></div>
+      <div id="fx-sparks"></div>
+      <canvas id="confetti"></canvas>
+      <div id="pulse"></div>
+      <div id="countdown" aria-hidden="true">3</div>
+    </div>
+
+    <p id="typed" aria-live="polite"></p>
+
+    <p class="footer">
+      Feito com carinho por <strong>'Miriz'</strong>.
+    </p>
+  </article>
+</main>
+
+<script>
+/* ===== Utilidades ===== */
+const qs = s => document.querySelector(s);
+const cardEl = qs('#card-el'); // Novo: Referência ao cartão principal
+const cake = qs('#cake'), nameEl = qs('#name'), typedEl = qs('#typed');
+const countdown = qs('#countdown'), balloons = qs('#fx-balloons');
+const canvas = qs('#confetti'), ctx = canvas.getContext('2d', {alpha:true});
+const sparksBox = qs('#fx-sparks'), pulse = qs('#pulse'), twinkles = qs('#twinkles');
+const prefersLess = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* --- Configuração de Áudio (Tone.js) --- */
+let audioContextReady = false;
+let synth, noise, noiseFilter;
+
+// Inicializa o contexto de áudio
+function initAudio(){
+  if (audioContextReady || typeof Tone === 'undefined') return;
+  try {
+    Tone.start();
+
+    synth = new Tone.PolySynth(Tone.Synth, {
+        oscillator: { type: "sine" },
+        envelope: { attack: 0.005, decay: 0.1, sustain: 0.3, release: 1 },
+        volume: -10
+    }).toDestination();
+
+    noise = new Tone.Noise("white").start();
+    noiseFilter = new Tone.Filter(3000, "lowpass").toDestination();
+    noise.connect(noiseFilter);
+    noise.volume.value = -Infinity;
+
+    audioContextReady = true;
+  } catch(e) {
+    console.error("Erro ao iniciar Tone.js:", e);
+  }
+}
+document.body.addEventListener('click', initAudio, {once: true});
+document.body.addEventListener('pointerdown', initAudio, {once: true});
+
+function playBlowSound(){
+  if (!audioContextReady) return;
+  noise.volume.cancelAndHoldAtTime(Tone.now());
+  noise.volume.rampTo(-3, 0.05, Tone.now());
+  noise.volume.rampTo(-Infinity, 0.7, Tone.now() + 0.1);
+}
+function playRelightSound(){
+  if (!audioContextReady) return;
+  synth.triggerAttackRelease("C6", "32n"); 
+}
+function playHappyBirthday(){
+  if (!audioContextReady) return;
+  const now = Tone.now();
+  const sequence = [
+    ["C4", "4n"], ["C4", "4n"], ["D4", "2n"], ["C4", "2n"], ["F4", "2n"], ["E4", "1n"],
+    ["C4", "4n"], ["C4", "4n"], ["D4", "2n"], ["C4", "2n"], ["G4", "2n"], ["F4", "1n"]
+  ];
+  let time = now;
+  sequence.forEach(([note, duration]) => {
+    synth.triggerAttackRelease(note, duration, time);
+    time += Tone.Time(duration).toSeconds();
+  });
+}
+
+/* Haptics */
+function haptic(pattern=35){
+  try{ if('vibrate' in navigator) navigator.vibrate(pattern); }catch(e){}
+}
+
+/* Personalização via URL (?n=Nome&?m=Mensagem) */
+(() => {
+  const p = new URLSearchParams(location.search);
+  const n = p.get('n'); const m = p.get('m');
+  if (n) nameEl.textContent = decodeURIComponent(n);
+  if (m) typedEl.dataset.msg = decodeURIComponent(m);
+})();
+
+/* Estrelinhas */
+(function(){
+  const N = 36;
+  for(let i=0;i<N;i++){
+    const e = document.createElement('i'); e.className = 'tw';
+    e.style.left = (5 + Math.random()*90) + '%';
+    e.style.top = (5 + Math.random()*85) + '%';
+    e.style.animationDelay = (Math.random()*2.4).toFixed(2) + 's';
+    e.style.opacity = (0.2 + Math.random()*0.6).toFixed(2);
+    twinkles.appendChild(e);
+  }
+})();
+
+/* Canvas confete (com direção) */
+let confettiRunning = false, confettiParts = [];
+function resizeCanvas(){ 
+  canvas.width = canvas.parentElement.clientWidth; 
+  canvas.height = 320; 
+}
+addEventListener('resize', resizeCanvas, {passive:true}); 
+resizeCanvas();
+
+function spawnConfetti({count=240, dir='down'} = {}){
+  if (prefersLess) return;
+  confettiParts.length = 0;
+
+  for(let i=0;i<count;i++){
+    const upward = dir === 'up';
+    confettiParts.push({
+      x: Math.random()*canvas.width,
+      y: upward ? (canvas.height + 12 + Math.random()*20) : (-10 - Math.random()*20),
+      r: 2 + Math.random()*4,
+      c: `hsl(${Math.random()*360},90%,60%)`,
+      shape: Math.floor(Math.random()*3),
+      vx: -1 + Math.random()*2,
+      vy: upward ? -(2 + Math.random()*2) : (2 + Math.random()*2),
+      rot: Math.random()*360, 
+      vr: -6 + Math.random()*12,
+      g: upward ? -0.03 : 0.03
+    });
+  }
+  confettiRunning = true; 
+  requestAnimationFrame(tickConfetti);
+}
+
+function tickConfetti(){
+  if(!confettiRunning) return;
+  const ctx2 = ctx;
+  ctx2.clearRect(0,0,canvas.width,canvas.height);
+
+  for(const p of confettiParts){
+    p.x += p.vx; 
+    p.y += p.vy; 
+    p.vy += p.g; 
+    p.rot += p.vr*0.1;
+
+    ctx2.save(); 
+    ctx2.translate(p.x, p.y); 
+    ctx2.rotate(p.rot * Math.PI/180); 
+    ctx2.fillStyle = p.c;
+
+    if(p.shape===0){ ctx2.fillRect(-p.r, -p.r*0.5, p.r*2, p.r); }
+    else if(p.shape===1){ ctx2.beginPath(); ctx2.arc(0,0,p.r,0,Math.PI*2); ctx2.fill(); }
+    else{ ctx2.beginPath(); ctx2.moveTo(0,-p.r); ctx2.lineTo(p.r,p.r); ctx2.lineTo(-p.r,p.r); ctx2.closePath(); ctx2.fill(); }
+
+    ctx2.restore();
+  }
+
+  confettiParts = confettiParts.filter(p => 
+    (p.g > 0 && p.y < canvas.height + 10) || 
+    (p.g < 0 && p.y > -10)
+  );
+
+  if(confettiParts.length) requestAnimationFrame(tickConfetti); 
+  else confettiRunning = false;
+}
+
+/* Balões */
+function spawnBalloons(count=12){
+  if (prefersLess) return;
+  balloons.innerHTML = '';
+  for(let i=0;i<count;i++){
+    const b = document.createElement('div'); b.className = 'balloon';
+    const left = 6 + Math.random()*88, delay = (Math.random()*1.5).toFixed(2);
+    const drift = (Math.random()*80 - 40).toFixed(0) + 'px';
+    b.style.left = left + '%'; b.style.animationDelay = delay + 's';
+    b.style.setProperty('--drift', drift);
+    b.style.background = `radial-gradient(circle at 30% 32%, #fff8 0 15%, #0000 16%),
+      hsl(${Math.floor(Math.random()*360)},85%,65%)`;
+    balloons.appendChild(b);
+  }
+  setTimeout(()=> balloons.innerHTML='', 7500);
+}
+
+/* Faíscas da chama */
+let sparkTimer = null;
+function startSparks(){
+  if (prefersLess || sparkTimer) return;
+  sparkTimer = setInterval(()=>{
+    const s = document.createElement('i');
+    s.className = 'spark';
+    s.style.setProperty('--dx', (Math.random()*40 - 20).toFixed(0)+'px');
+    document.getElementById('fx-sparks').appendChild(s); 
+    setTimeout(()=> s.remove(), 1000);
+  }, 120);
+}
+function stopSparks(){ clearInterval(sparkTimer); sparkTimer = null; }
+
+/* Mensagem digitada */
+const defaultMsg = () => `Parabéns, ${nameEl.textContent}! Com o trabalho me enlouquecendo, cê deixa o dia mais leve. (Mesmo sem falar nada quando eu broto do lado kkkk) 😁`;
+function typeMessage(){
+  const msg = typedEl.dataset.msg || defaultMsg();
+  typedEl.textContent = ''; typedEl.classList.add('reveal');
+  let i=0, speed=18; 
+  (function step(){ if(i<=msg.length){ typedEl.textContent = msg.slice(0,i++); setTimeout(step, speed); } })();
+}
+
+/* Contagem (sem emoji final): só confete subindo */
+let counting = false;
+function showCountdown(cb){
+  if(counting) return; 
+  counting = true;
+  countdown.classList.add('show');
+  let v = 3; 
+  countdown.textContent = v;
+
+  const t = setInterval(()=>{
+    v--;
+    if (v > 0){
+      countdown.textContent = v;
+    } else {
+      clearInterval(t);
+      setTimeout(()=>{
+        countdown.classList.remove('show'); 
+        counting=false; 
+        cb?.();
+      }, 80);
+    }
+  }, 700);
+}
+
+function pulseBoom(){ pulse.classList.remove('show'); void pulse.offsetWidth; pulse.classList.add('show'); }
+function boingCake(){ cake.classList.add('boing'); setTimeout(()=>cake.classList.remove('boing'), 520); }
+function boingCard(){ cardEl.classList.add('card-boing'); setTimeout(()=>cardEl.classList.remove('card-boing'), 520); }
+
+/* Modo Festa (long-press) */
+let pressTimer=null;
+cake.addEventListener('pointerdown', ()=>{
+  pressTimer = setTimeout(()=>{ 
+    spawnConfetti({count: 420, dir: 'down'}); 
+    setTimeout(()=> spawnBalloons(18), 200);
+    boingCake(); 
+    haptic(20);
+  }, 600);
+});
+['pointerup','pointerleave','pointercancel'].forEach(e=> 
+  cake.addEventListener(e, ()=>{ clearTimeout(pressTimer); pressTimer=null; })
+);
+
+/* Clique no bolo: apaga/acende */
+function blow(){
+  showCountdown(()=>{
+    cake.classList.add('blown'); 
+    stopSparks(); 
+    pulseBoom(); 
+    boingCake();
+    boingCard();
+    haptic([20,40,20]);
+    playBlowSound();
+    spawnConfetti({count: 260, dir: 'up'});
+    setTimeout(()=> spawnBalloons(12), 200);
+    typeMessage();
+    setTimeout(playHappyBirthday, 800);
+  });
+}
+function relight(){
+  cake.classList.remove('blown'); 
+  boingCake();
+  playRelightSound();
+
+  const fire = document.querySelector('.fire');
+  if (fire){
+    fire.classList.add('relight');
+    setTimeout(()=> fire.classList.remove('relight'), 180);
+  }
+
+  confettiRunning = false; 
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  balloons.innerHTML = ''; 
+  typedEl.textContent = ''; 
+  typedEl.classList.remove('reveal');
+  startSparks();
+  haptic(15);
+}
+cake.addEventListener('click', ()=> cake.classList.contains('blown') ? relight() : blow());
+
+/* Inicialização */
+(function init(){
+  resizeCanvas();
+  if(!prefersLess) startSparks();
+  if (prefersLess) document.querySelectorAll('.fire').forEach(el => el.style.animation = 'none');
+})();
+</script>
+</body>
+</html>
