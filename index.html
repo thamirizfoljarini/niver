@@ -218,8 +218,8 @@ h1{font-size:clamp(22px,5.4vw,34px); margin:0 0 6px}
 <body>
 <main class="container">
   <article class="card" id="card-el" aria-label="Cartão animado de aniversário">
-    <h1>Feliz Aniversário, <span id="name">Douglas!</span> 🎂</h1>
-    <p class="subtitle">Assopre a velinha, velhinho! ha ha </p>
+    <h1>Feliz Aniversário, <span id="name">Fabi!</span> 🎂</h1>
+    <p class="subtitle">Assopre a velinha, jovem senhora! ha ha </p>
 
     <div class="stage" aria-live="polite">
       <div id="twinkles"></div>
@@ -442,7 +442,7 @@ function startSparks(){
 function stopSparks(){ clearInterval(sparkTimer); sparkTimer = null; }
 
 /* Mensagem digitada */
-const defaultMsg = () => `Parabéns, ${nameEl.textContent}! Com o trabalho me enlouquecendo, cê deixa o dia mais leve. (Mesmo sem falar nada quando eu broto do lado kkkk) 😁`;
+const defaultMsg = () => `Parabéns, ${nameEl.textContent}! Mesmo não tão próximas como antes, nem trabalhando mais juntas, ainda gosto de você kkkkk Café? Quando?`;
 function typeMessage(){
   const msg = typedEl.dataset.msg || defaultMsg();
   typedEl.textContent = ''; typedEl.classList.add('reveal');
@@ -538,3 +538,4 @@ cake.addEventListener('click', ()=> cake.classList.contains('blown') ? relight()
 </script>
 </body>
 </html>
+
