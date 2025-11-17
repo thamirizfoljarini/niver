@@ -22,9 +22,9 @@ body{
   margin:0; min-height:100svh; display:grid; place-items:center;
   font:500 16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Noto Sans",sans-serif;
   color:var(--txt);
-  background:
-    radial-gradient(1200px 500px at 50% -20%, color-mix(in oklab, var(--panel) 40%, #000) 10%, var(--bg) 60%),
-    linear-gradient(180deg, #0000, #0002);
+  /* --- FALLBACK DE BACKGROUND --- */
+  background: var(--bg);
+  /* A linha 'background' com 'color-mix' foi movida para o @supports */
 }
 .container{ width:min(720px,94vw); padding:12px }
 .card{
@@ -46,45 +46,43 @@ h1{font-size:clamp(22px,5.4vw,34px); margin:0 0 6px}
   cursor:pointer;
 }
 
-/* --- Bolo --- */
+/* --- Bolo (FALLBACK PARA NAVEGADORES ANTIGOS) --- */
 .layer{ position:absolute; left:0; right:0; height:46px; border-radius:12px; box-shadow:inset 0 -4px 0 #0001 }
-.layer:nth-child(1){bottom:0;   background:linear-gradient(var(--cakeA), color-mix(in oklab,var(--cakeA),#000 4%))}
-.layer:nth-child(2){bottom:42px;background:linear-gradient(var(--cakeB), color-mix(in oklab,var(--cakeB),#000 4%))}
-.layer:nth-child(3){bottom:84px;background:linear-gradient(var(--cakeA), color-mix(in oklab,var(--cakeA),#000 4%))}
+.layer:nth-child(1){bottom:0;   background:var(--cakeA)}
+.layer:nth-child(2){bottom:42px;background:var(--cakeB)}
+.layer:nth-child(3){bottom:84px;background:var(--cakeA)}
 
-/* Cobertura (ganache) com menisco e sombra */
 .cake-top{
-  position:absolute; left:0; right:0; top:-18px; height:32px; background:
-    linear-gradient(180deg, color-mix(in oklab, var(--cream), #000 6%), var(--cream));
+  position:absolute; left:0; right:0; top:-18px; height:32px; 
+  background: var(--cream); /* Fallback */
   border-radius:18px 18px 8px 8px; 
-  box-shadow:
-    inset 0 8px 0 color-mix(in oklab, #fff 28%, transparent),
-    inset 0 -2px 0 color-mix(in oklab, #000 20%, transparent);
+  box-shadow: /* Fallback */
+    inset 0 8px 0 #ffffff47,
+    inset 0 -2px 0 #00000033;
 }
-/* Escorridos chiques nas EXTREMIDADES via pseudo-elementos */
 .cake-top::before,
 .cake-top::after{
   content:""; position:absolute; top:26px; width:18px; height:42px;
-  background:linear-gradient(180deg, color-mix(in oklab, var(--cream), #000 4%), var(--cream));
+  background: var(--cream); /* Fallback */
   border-radius:10px 10px 16px 16px / 10px 10px 20px 20px;
-  box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent);
+  box-shadow: inset 0 -2px 0 #00000014; /* Fallback */
 }
 .cake-top::before{ left:10px;  height:38px; width:16px; }
 .cake-top::after { right:10px; height:46px; width:20px; }
-/* brilho lateral sutil nas extremidades */
+/* brilho lateral sutil (para fallback E moderno) */
 .cake-top::before{ box-shadow:inset 0 -2px 0 #0003, inset 3px 0 0 #ffffff1a }
 .cake-top::after { box-shadow:inset 0 -2px 0 #0003, inset -3px 0 0 #ffffff1a }
 
-/* Escorridos discretos no MEIO (1–2) */
 .drip{
   position:absolute; top:20px;
-  background:linear-gradient(180deg, color-mix(in oklab, var(--cream), #000 3%), var(--cream));
+  background: var(--cream); /* Fallback */
   border-radius:10px 10px 18px 18px / 10px 10px 22px 22px;
-  box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent);
+  box-shadow: inset 0 -2px 0 #00000014; /* Fallback */
 }
-/* posições chiques ~ 35% e 65% da largura */
 .cake-top .mid1{ left:34%; width:14px; height:30px }
 .cake-top .mid2{ left:64%; width:10px; height:24px }
+/* --- Fim do Fallback do Bolo --- */
+
 
 /* --- Vela --- */
 .candle{
@@ -108,7 +106,8 @@ h1{font-size:clamp(22px,5.4vw,34px); margin:0 0 6px}
 .fire{
   position:absolute; top:-38px; left:50%; width:20px; height:28px; margin-left:-10px;
   border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
-  background:radial-gradient(60% 60% at 50% 50%, #ffd36b 0%, color-mix(in oklab, var(--glow), #ff5a00 30%) 60%, #ff5a00 100%);
+  /* --- FALLBACK DA CHAMA --- */
+  background:radial-gradient(60% 60% at 50% 50%, #ffd36b 0%, var(--glow) 60%, #ff5a00 100%);
   filter:drop-shadow(0 0 14px var(--glow));
   transform-origin:50% 90%;
   animation:flicker .09s infinite alternate, float 1.8s ease-in-out infinite;
@@ -213,6 +212,53 @@ h1{font-size:clamp(22px,5.4vw,34px); margin:0 0 6px}
 /* --- Rodapé --- */
 .footer{ margin-top:14px; opacity:.75; font-size:12px; text-align:center }
 .footer a{ color:#ffd3e6; text-decoration:none; border-bottom:1px dotted #ffd3e655 }
+
+
+/* ============================================== */
+/* Melhorias para navegadores modernos c/ @supports
+/* Isso aplica os gradientes complexos APENAS
+/* se o 'color-mix' for suportado.
+/* ============================================== */
+@supports (background: color-mix(in oklab, red, blue)) {
+  body {
+    /* Gradiente moderno para o fundo */
+    background:
+      radial-gradient(1200px 500px at 50% -20%, color-mix(in oklab, var(--panel) 40%, #000) 10%, var(--bg) 60%),
+      linear-gradient(180deg, #0000, #0002);
+  }
+  
+  /* Gradientes modernos para o bolo */
+  .layer:nth-child(1){background:linear-gradient(var(--cakeA), color-mix(in oklab,var(--cakeA),#000 4%))}
+  .layer:nth-child(2){background:linear-gradient(var(--cakeB), color-mix(in oklab,var(--cakeB),#000 4%))}
+  .layer:nth-child(3){background:linear-gradient(var(--cakeA), color-mix(in oklab,var(--cakeA),#000 4%))}
+
+  .cake-top{
+    background:
+      linear-gradient(180deg, color-mix(in oklab, var(--cream), #000 6%), var(--cream));
+    box-shadow:
+      inset 0 8px 0 color-mix(in oklab, #fff 28%, transparent),
+      inset 0 -2px 0 color-mix(in oklab, #000 20%, transparent);
+  }
+  
+  .cake-top::before,
+  .cake-top::after{
+    background:linear-gradient(180deg, color-mix(in oklab, var(--cream), #000 4%), var(--cream));
+    box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent);
+  }
+  /* Re-aplicando brilho lateral por cima da sombra do @supports */
+  .cake-top::before{ box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent), inset 3px 0 0 #ffffff1a }
+  .cake-top::after { box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent), inset -3px 0 0 #ffffff1a }
+
+  .drip{
+    background:linear-gradient(180deg, color-mix(in oklab, var(--cream), #000 3%), var(--cream));
+    box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent);
+  }
+  
+  /* Gradiente moderno para a chama */
+  .fire{
+    background:radial-gradient(60% 60% at 50% 50%, #ffd36b 0%, color-mix(in oklab, var(--glow), #ff5a00 30%) 60%, #ff5a00 100%);
+  }
+}
 </style>
 </head>
 <body>
@@ -538,5 +584,3 @@ cake.addEventListener('click', ()=> cake.classList.contains('blown') ? relight()
 </script>
 </body>
 </html>
-
-
