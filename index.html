@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Feliz Aniversário 🎂</title>
 <meta name="color-scheme" content="dark light" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script> 
 <style>
@@ -216,18 +215,14 @@ h1{font-size:clamp(22px,5.4vw,34px); margin:0 0 6px}
 
 /* ============================================== */
 /* Melhorias para navegadores modernos c/ @supports
-/* Isso aplica os gradientes complexos APENAS
-/* se o 'color-mix' for suportado.
 /* ============================================== */
 @supports (background: color-mix(in oklab, red, blue)) {
   body {
-    /* Gradiente moderno para o fundo */
     background:
       radial-gradient(1200px 500px at 50% -20%, color-mix(in oklab, var(--panel) 40%, #000) 10%, var(--bg) 60%),
       linear-gradient(180deg, #0000, #0002);
   }
   
-  /* Gradientes modernos para o bolo */
   .layer:nth-child(1){background:linear-gradient(var(--cakeA), color-mix(in oklab,var(--cakeA),#000 4%))}
   .layer:nth-child(2){background:linear-gradient(var(--cakeB), color-mix(in oklab,var(--cakeB),#000 4%))}
   .layer:nth-child(3){background:linear-gradient(var(--cakeA), color-mix(in oklab,var(--cakeA),#000 4%))}
@@ -245,7 +240,6 @@ h1{font-size:clamp(22px,5.4vw,34px); margin:0 0 6px}
     background:linear-gradient(180deg, color-mix(in oklab, var(--cream), #000 4%), var(--cream));
     box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent);
   }
-  /* Re-aplicando brilho lateral por cima da sombra do @supports */
   .cake-top::before{ box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent), inset 3px 0 0 #ffffff1a }
   .cake-top::after { box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent), inset -3px 0 0 #ffffff1a }
 
@@ -254,18 +248,23 @@ h1{font-size:clamp(22px,5.4vw,34px); margin:0 0 6px}
     box-shadow:inset 0 -2px 0 color-mix(in oklab, #000 8%, transparent);
   }
   
-  /* Gradiente moderno para a chama */
   .fire{
     background:radial-gradient(60% 60% at 50% 50%, #ffd36b 0%, color-mix(in oklab, var(--glow), #ff5a00 30%) 60%, #ff5a00 100%);
   }
+}
+
+/* --- ESCONDER TEXTOS (só bolo na tela) --- */
+.subtitle,
+#typed,
+.footer{
+  display:none;
 }
 </style>
 </head>
 <body>
 <main class="container">
   <article class="card" id="card-el" aria-label="Cartão animado de aniversário">
-    <h1>Feliz Aniversário, <span id="name">Fabi!</span> 🎂</h1>
-    <p class="subtitle">Assopre a velinha, jovem senhora! ha ha </p>
+    <p class="subtitle">Agora ela realmente é uma vela</p>
 
     <div class="stage" aria-live="polite">
       <div id="twinkles"></div>
@@ -273,7 +272,7 @@ h1{font-size:clamp(22px,5.4vw,34px); margin:0 0 6px}
       <div id="cake" aria-label="Bolo com vela animada" role="img" title="Toque para assoprar/acender">
         <div class="layer"></div><div class="layer"></div><div class="layer"></div>
         <div class="cake-top">
-          <!-- escorridos chiques: só extremidades (via ::before/::after) e 1–2 no meio -->
+          <!-- escorridos chiques -->
           <span class="drip mid1"></span>
           <span class="drip mid2"></span>
         </div>
@@ -298,7 +297,7 @@ h1{font-size:clamp(22px,5.4vw,34px); margin:0 0 6px}
     <p id="typed" aria-live="polite"></p>
 
     <p class="footer">
-      Feito com carinho por <strong>'Thami'</strong>.
+      Feito com carinho por <strong>Dinda Thami</strong>.
     </p>
   </article>
 </main>
@@ -306,27 +305,27 @@ h1{font-size:clamp(22px,5.4vw,34px); margin:0 0 6px}
 <script>
 /* ===== Utilidades ===== */
 const qs = s => document.querySelector(s);
-const cardEl = qs('#card-el'); // Novo: Referência ao cartão principal
-const cake = qs('#cake'), nameEl = qs('#name'), typedEl = qs('#typed');
+const cardEl = qs('#card-el');
+const cake = qs('#cake');
+const typedEl = qs('#typed');
 const countdown = qs('#countdown'), balloons = qs('#fx-balloons');
 const canvas = qs('#confetti'), ctx = canvas.getContext('2d', {alpha:true});
 const sparksBox = qs('#fx-sparks'), pulse = qs('#pulse'), twinkles = qs('#twinkles');
 const prefersLess = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* --- Configuração de Áudio (Tone.js) --- */
+/* --- Áudio com Tone.js --- */
 let audioContextReady = false;
 let synth, noise, noiseFilter;
 
-// Inicializa o contexto de áudio
 function initAudio(){
   if (audioContextReady || typeof Tone === 'undefined') return;
   try {
     Tone.start();
 
     synth = new Tone.PolySynth(Tone.Synth, {
-        oscillator: { type: "sine" },
-        envelope: { attack: 0.005, decay: 0.1, sustain: 0.3, release: 1 },
-        volume: -10
+      oscillator: { type: "sine" },
+      envelope: { attack: 0.005, decay: 0.1, sustain: 0.3, release: 1 },
+      volume: -10
     }).toDestination();
 
     noise = new Tone.Noise("white").start();
@@ -352,18 +351,40 @@ function playRelightSound(){
   if (!audioContextReady) return;
   synth.triggerAttackRelease("C6", "32n"); 
 }
+// "Parabéns pra você" + reacender ao final
 function playHappyBirthday(){
-  if (!audioContextReady) return;
+  if (!audioContextReady || !synth) return;
+
   const now = Tone.now();
   const sequence = [
+    // "Parabéns pra você"
     ["C4", "4n"], ["C4", "4n"], ["D4", "2n"], ["C4", "2n"], ["F4", "2n"], ["E4", "1n"],
-    ["C4", "4n"], ["C4", "4n"], ["D4", "2n"], ["C4", "2n"], ["G4", "2n"], ["F4", "1n"]
+    // "Nesta data querida"
+    ["C4", "4n"], ["C4", "4n"], ["D4", "2n"], ["C4", "2n"], ["G4", "2n"], ["F4", "1n"],
+    // "Muitas felicidades"
+    ["C4", "4n"], ["C4", "4n"], ["C5", "2n"], ["A4", "2n"],
+    ["F4", "2n"], ["E4", "2n"], ["D4", "1n"],
+    // "Muitos anos de vida"
+    ["Bb4", "4n"], ["Bb4", "4n"], ["A4", "2n"], ["F4", "2n"],
+    ["G4", "2n"], ["F4", "1n"],
   ];
+
   let time = now;
+  let totalSeconds = 0;
+
   sequence.forEach(([note, duration]) => {
+    const dur = Tone.Time(duration).toSeconds();
     synth.triggerAttackRelease(note, duration, time);
-    time += Tone.Time(duration).toSeconds();
+    time += dur;
+    totalSeconds += dur;
   });
+
+  // Quando a música terminar, reacende a vela se ainda estiver apagada
+  setTimeout(() => {
+    if (cake.classList.contains('blown')) {
+      relight();
+    }
+  }, totalSeconds * 1000);
 }
 
 /* Haptics */
@@ -371,12 +392,11 @@ function haptic(pattern=35){
   try{ if('vibrate' in navigator) navigator.vibrate(pattern); }catch(e){}
 }
 
-/* Personalização via URL (?n=Nome&?m=Mensagem) */
+/* Personalização via URL – só mensagem, e mesmo assim está oculta na tela, mas deixei suportado */
 (() => {
   const p = new URLSearchParams(location.search);
-  const n = p.get('n'); const m = p.get('m');
-  if (n) nameEl.textContent = decodeURIComponent(n);
-  if (m) typedEl.dataset.msg = decodeURIComponent(m);
+  const m = p.get('m');
+  if (m && typedEl) typedEl.dataset.msg = decodeURIComponent(m);
 })();
 
 /* Estrelinhas */
@@ -392,7 +412,7 @@ function haptic(pattern=35){
   }
 })();
 
-/* Canvas confete (com direção) */
+/* Canvas confete */
 let confettiRunning = false, confettiParts = [];
 function resizeCanvas(){ 
   canvas.width = canvas.parentElement.clientWidth; 
@@ -426,8 +446,7 @@ function spawnConfetti({count=240, dir='down'} = {}){
 
 function tickConfetti(){
   if(!confettiRunning) return;
-  const ctx2 = ctx;
-  ctx2.clearRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
   for(const p of confettiParts){
     p.x += p.vx; 
@@ -435,16 +454,16 @@ function tickConfetti(){
     p.vy += p.g; 
     p.rot += p.vr*0.1;
 
-    ctx2.save(); 
-    ctx2.translate(p.x, p.y); 
-    ctx2.rotate(p.rot * Math.PI/180); 
-    ctx2.fillStyle = p.c;
+    ctx.save(); 
+    ctx.translate(p.x, p.y); 
+    ctx.rotate(p.rot * Math.PI/180); 
+    ctx.fillStyle = p.c;
 
-    if(p.shape===0){ ctx2.fillRect(-p.r, -p.r*0.5, p.r*2, p.r); }
-    else if(p.shape===1){ ctx2.beginPath(); ctx2.arc(0,0,p.r,0,Math.PI*2); ctx2.fill(); }
-    else{ ctx2.beginPath(); ctx2.moveTo(0,-p.r); ctx2.lineTo(p.r,p.r); ctx2.lineTo(-p.r,p.r); ctx2.closePath(); ctx2.fill(); }
+    if(p.shape===0){ ctx.fillRect(-p.r, -p.r*0.5, p.r*2, p.r); }
+    else if(p.shape===1){ ctx.beginPath(); ctx.arc(0,0,p.r,0,Math.PI*2); ctx.fill(); }
+    else{ ctx.beginPath(); ctx.moveTo(0,-p.r); ctx.lineTo(p.r,p.r); ctx.lineTo(-p.r,p.r); ctx.closePath(); ctx.fill(); }
 
-    ctx2.restore();
+    ctx.restore();
   }
 
   confettiParts = confettiParts.filter(p => 
@@ -481,22 +500,13 @@ function startSparks(){
     const s = document.createElement('i');
     s.className = 'spark';
     s.style.setProperty('--dx', (Math.random()*40 - 20).toFixed(0)+'px');
-    document.getElementById('fx-sparks').appendChild(s); 
+    sparksBox.appendChild(s); 
     setTimeout(()=> s.remove(), 1000);
   }, 120);
 }
 function stopSparks(){ clearInterval(sparkTimer); sparkTimer = null; }
 
-/* Mensagem digitada */
-const defaultMsg = () => `Parabéns, ${nameEl.textContent}! Mesmo não tão próximas como antes, nem trabalhando mais juntas, ainda gosto de você kkkkk Café? Quando?`;
-function typeMessage(){
-  const msg = typedEl.dataset.msg || defaultMsg();
-  typedEl.textContent = ''; typedEl.classList.add('reveal');
-  let i=0, speed=18; 
-  (function step(){ if(i<=msg.length){ typedEl.textContent = msg.slice(0,i++); setTimeout(step, speed); } })();
-}
-
-/* Contagem (sem emoji final): só confete subindo */
+/* Contagem 3,2,1 */
 let counting = false;
 function showCountdown(cb){
   if(counting) return; 
@@ -524,7 +534,7 @@ function pulseBoom(){ pulse.classList.remove('show'); void pulse.offsetWidth; pu
 function boingCake(){ cake.classList.add('boing'); setTimeout(()=>cake.classList.remove('boing'), 520); }
 function boingCard(){ cardEl.classList.add('card-boing'); setTimeout(()=>cardEl.classList.remove('card-boing'), 520); }
 
-/* Modo Festa (long-press) */
+/* Modo Festa (press longo) */
 let pressTimer=null;
 cake.addEventListener('pointerdown', ()=>{
   pressTimer = setTimeout(()=>{ 
@@ -550,7 +560,7 @@ function blow(){
     playBlowSound();
     spawnConfetti({count: 260, dir: 'up'});
     setTimeout(()=> spawnBalloons(12), 200);
-    typeMessage();
+    // mensagem digitada continua existindo no código, mas está oculta no CSS
     setTimeout(playHappyBirthday, 800);
   });
 }
@@ -568,8 +578,10 @@ function relight(){
   confettiRunning = false; 
   ctx.clearRect(0,0,canvas.width,canvas.height);
   balloons.innerHTML = ''; 
-  typedEl.textContent = ''; 
-  typedEl.classList.remove('reveal');
+  if (typedEl){
+    typedEl.textContent = ''; 
+    typedEl.classList.remove('reveal');
+  }
   startSparks();
   haptic(15);
 }
