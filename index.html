@@ -548,7 +548,6 @@ cake.addEventListener('pointerdown', ()=>{
   cake.addEventListener(e, ()=>{ clearTimeout(pressTimer); pressTimer=null; })
 );
 
-/* Clique no bolo: apaga/acende */
 function blow(){
   showCountdown(()=>{
     cake.classList.add('blown'); 
@@ -557,13 +556,15 @@ function blow(){
     boingCake();
     boingCard();
     haptic([20,40,20]);
-    playBlowSound();
+    playBlowSound(); // barulhinho de assopro
     spawnConfetti({count: 260, dir: 'up'});
     setTimeout(()=> spawnBalloons(12), 200);
-    // mensagem digitada continua existindo no código, mas está oculta no CSS
-    setTimeout(playHappyBirthday, 800);
+
+    // Adianta a música pra ficar mais sincronizada com o estouro no celular
+    setTimeout(playHappyBirthday, 200); // testa 200 ms
   });
 }
+
 function relight(){
   cake.classList.remove('blown'); 
   boingCake();
@@ -596,3 +597,4 @@ cake.addEventListener('click', ()=> cake.classList.contains('blown') ? relight()
 </script>
 </body>
 </html>
+
